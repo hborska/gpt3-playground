@@ -13,7 +13,12 @@ export default function Home() {
     e.preventDefault();
 
     try {
-      const req = await axios.get(`/api/openai?animal=${animalName}`);
+      const req = await axios.get(`/api/openai?animal=${animalName}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {},
+      });
       const data = req.data;
       setOpenAIResult({ res: data.result, name: animalName });
     } catch (error) {
