@@ -3,6 +3,7 @@ import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import useSWR from "swr";
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function Home() {
   const [animalName, setAnimalName] = useState("");
@@ -11,13 +12,13 @@ export default function Home() {
   const callOpenAiAPI = async (e) => {
     e.preventDefault();
 
-    fetch(`/api/openai?animal=${animalName}`)
-      .then((r) => r.json())
-      .then((data) => {
-        setOpenAIResult({ name: animalName, res: data.result });
-        setAnimalName("");
-      })
-      .catch((err) => console.log(err));
+    try {
+      const req = await axios.get(`/api/openai?animal=${animalName}`);
+      const data = req.data;
+      setOpenAIResult({ res: data.result, name: animalName });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
